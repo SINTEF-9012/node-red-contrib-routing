@@ -24,15 +24,16 @@ module.exports = function(RED) {
       routesDefinitions[routes[i].v] = dispatch.bind(node, i);
     }
 
-    var router = rlite(function() {
+    var router = rlite(function(params, message, url) {
       if (!is404) {
         node.status({
           shape: "dot",
-          fill: "red",
+          fill: "yellow",
           text: "route not found"
         });
         is404 = true;
       }
+      node.warn("The route for the topic \""+url+"\" has not been found.");
     }, routesDefinitions);
 
     node.on("input", function(msg) {
